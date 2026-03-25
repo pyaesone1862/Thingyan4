@@ -7,61 +7,47 @@
     <style>
         body, html {
             margin: 0; padding: 0; height: 100%; width: 100%;
-            overflow: hidden; background: #b3e5fc;
+            overflow: hidden; background: #000; /* Video ကြည့်ရတာ လှအောင် အမည်းရောင်ထားတာ */
             font-family: sans-serif;
         }
 
-        /* မိုးရေစက် Animation */
+        /* ရေစက်ကျတဲ့ Animation */
         .rain-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 5; pointer-events: none;
+            z-index: 1; pointer-events: none;
         }
         .drop {
             position: absolute; width: 2px; height: 15px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.6);
             animation: fall linear infinite;
         }
         @keyframes fall { to { transform: translateY(110vh); } }
 
-        /* Screen Wrapper */
         .screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center;
             align-items: center; z-index: 10;
+            background: #d0f0f5;
         }
 
-        /* ငွေဖလားပုံ */
         .bowl-img {
             width: 70%; max-width: 250px;
             cursor: pointer; z-index: 20;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
             transition: transform 0.2s;
         }
 
-        /* Glass UI Button */
         .glass-btn {
-            margin-top: 25px;
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 12px;
-            padding: 12px 30px;
-            color: #fff; font-weight: bold; font-size: 0.9rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-            animation: pulse 1.5s infinite;
+            margin-top: 20px; background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px); border-radius: 10px;
+            padding: 10px 20px; font-weight: bold; color: #333;
         }
-        @keyframes pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 
-        /* ဗီဒီယိုကို ဖုန်း Screen နဲ့ အံကိုက်ဖြစ်အောင်ညှိတာ */
+        /* Fullscreen Video - Size ပြင်ထားပါတယ် */
         .fs-video {
-            position: fixed;
-            top: 50%; left: 50%;
-            width: 100%; height: 100%;
-            object-fit: contain; /* ဗီဒီယိုတစ်ခုလုံး မြင်ရအောင် contain သုံးထားပါတယ် */
-            transform: translate(-50%, -50%);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: contain; /* Video တစ်ခုလုံးကို screen ထဲဝင်အောင် အချိုးကျ ပြင်တာ */
             display: none; z-index: 30;
-            background: #000; /* ဗီဒီယိုဘေးမှာ အမည်းရောင် ပိတ်ထားဖို့ */
+            background: #000;
         }
 
         .hidden { display: none !important; }
@@ -72,8 +58,8 @@
     <div class="rain-container" id="rain"></div>
 
     <div id="first-screen" class="screen">
-        <img src="first.png" class="bowl-img" onclick="startApp()" alt="Bowl">
-        <div class="glass-btn">ရေလောင်းရန် ငွေဖလားကို နှိပ်ပါ</div>
+        <img src="first.png" class="bowl-img" onclick="startApp()">
+        <div class="glass-btn">ရေလောင်းရန် နှိပ်ပါ 💦</div>
     </div>
 
     <video id="vid-splash" class="fs-video" playsinline>
@@ -92,7 +78,6 @@
                 drop.classList.add('drop');
                 drop.style.left = Math.random() * 100 + 'vw';
                 drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
-                drop.style.opacity = Math.random();
                 container.appendChild(drop);
             }
         }
@@ -106,14 +91,9 @@
             screen1.classList.add('hidden');
             splash.style.display = 'block';
             
-            // အသံပါအောင် နှိပ်လိုက်တဲ့အချိန်မှာ play ခိုင်းတာပါ
+            // User က နှိပ်လိုက်ပြီဖြစ်လို့ အသံကို ဖွင့်လို့ရသွားပါပြီ (Unmute)
             splash.muted = false; 
-            splash.play().catch(e => {
-                console.log("Audio play error", e);
-                // တကယ်လို့ browser က ပိတ်ထားရင် muted နဲ့အရင်ဖွင့်မယ်
-                splash.muted = true;
-                splash.play();
-            });
+            splash.play();
 
             splash.onended = function() {
                 splash.style.display = 'none';
