@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Songkran 2026</title>
+    <title>သင်္ကြန်ပိတောက်လက်ဆောင်</title>
     <style>
         body, html {
             margin: 0; padding: 0; height: 100%; width: 100%;
@@ -11,19 +11,19 @@
             font-family: sans-serif;
         }
 
-        /* ရေစက်ကျတဲ့ Animation */
+        /* Rain Animation */
         .rain-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1; pointer-events: none;
         }
         .drop {
             position: absolute; width: 2px; height: 15px;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.5);
             animation: fall linear infinite;
         }
         @keyframes fall { to { transform: translateY(110vh); } }
 
-        /* First Screen */
+        /* Screens */
         .screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center;
@@ -31,25 +31,47 @@
             background: #d0f0f5;
         }
 
-        .bowl-img {
-            width: 75%; max-width: 280px;
-            cursor: pointer; z-index: 20;
+        /* Splash Video (Full Screen) */
+        #vid-splash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: fill; display: none; z-index: 30;
+            background: #000;
         }
 
-        .glass-btn {
-            margin-top: 20px; background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            border-radius: 12px; padding: 12px 24px;
-            font-weight: bold; color: #333; border: 1px solid rgba(255,255,255,0.3);
+        /* Video Card Styling (ပုံထဲကအတိုင်း ဘောင်အဝါလေးနဲ့) */
+        #final-card-wrapper {
+            background: #000; /* နောက်ခံအမည်း */
         }
 
-        /* Fullscreen Video - Size ညှိထားတာ */
-        .fs-video {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            object-fit: fill; /* Android Screen အပြည့် ဖြစ်သွားအောင် */
-            display: none; z-index: 30;
+        #final-card {
+            display: none; flex-direction: column; align-items: center;
+            z-index: 40; width: 92%; max-width: 450px;
+            padding: 8px;
+            border: 4px solid #ffcc00; /* အဝါရောင်ဘောင် */
+            border-radius: 25px;
+            background: #111;
         }
 
+        .video-box {
+            width: 100%; border-radius: 20px; overflow: hidden;
+            line-height: 0;
+        }
+
+        #vid-music { width: 100%; object-fit: contain; }
+
+        /* ဆုတောင်းစာသား (ပုံထဲကအတိုင်း) */
+        .blessing-text {
+            margin-top: 15px; color: #fff;
+            padding: 5px 10px 10px 10px;
+            font-size: 0.95rem; display: flex; align-items: center;
+        }
+
+        /* Utility */
+        .bowl-img { width: 75%; max-width: 280px; cursor: pointer; }
+        .glass-btn { 
+            margin-top: 20px; background: rgba(255,255,255,0.4); 
+            padding: 12px 24px; border-radius: 12px; font-weight: bold; 
+        }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -62,23 +84,31 @@
         <div class="glass-btn">ရေလောင်းရန် နှိပ်ပါ 💦</div>
     </div>
 
-    <video id="vid-splash" class="fs-video" playsinline>
+    <video id="vid-splash" playsinline>
         <source src="second.mp4" type="video/mp4">
     </video>
 
-    <video id="vid-music" class="fs-video" playsinline loop>
-        <source src="third.mp4" type="video/mp4">
-    </video>
+    <div id="final-card-wrapper" class="screen hidden">
+        <div id="final-card">
+            <div class="video-box">
+                <video id="vid-music" playsinline loop>
+                    <source src="third.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="blessing-text">
+                🌼 ပျော်ရွှင်ဖွယ် သင်္ကြန်အခါသမယ ဖြစ်ပါစေ 🌼
+            </div>
+        </div>
+    </div>
 
     <script>
-        // ရေစက်ကျအောင်လုပ်တာ
         function makeRain() {
             const container = document.getElementById('rain');
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 40; i++) {
                 const drop = document.createElement('div');
                 drop.classList.add('drop');
                 drop.style.left = Math.random() * 100 + 'vw';
-                drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+                drop.style.animationDuration = (Math.random() * 0.7 + 0.3) + 's';
                 container.appendChild(drop);
             }
         }
@@ -88,23 +118,18 @@
             const screen1 = document.getElementById('first-screen');
             const splash = document.getElementById('vid-splash');
             const music = document.getElementById('vid-music');
+            const finalWrapper = document.getElementById('final-card-wrapper');
+            const finalCard = document.getElementById('final-card');
 
-            // Screen ပြောင်းမယ်
             screen1.classList.add('hidden');
             splash.style.display = 'block';
-            
-            // အသံပါအောင် လုပ်ပြီး Play မယ်
             splash.muted = false;
-            splash.play().catch(err => {
-                // Browser က block ရင်တောင် play အောင်လုပ်တာ
-                splash.muted = true;
-                splash.play();
-            });
+            splash.play();
 
-            // ဒုတိယဗီဒီယိုပြီးရင်
             splash.onended = function() {
                 splash.style.display = 'none';
-                music.style.display = 'block';
+                finalWrapper.classList.remove('hidden');
+                finalCard.style.display = 'flex';
                 music.muted = false;
                 music.play();
             };
