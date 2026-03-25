@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Songkran Blessing 2026</title>
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.2);
+            --blur: blur(15px);
+        }
+
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            width: 100%; overflow: hidden;
+            background: #e0f7fa; /* ရေအရောင်ဖျော့ဖျော့ */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+        }
+
+        /* Rain Drops Animation */
+        .rain-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none;
+        }
+
+        .drop {
+            position: absolute; width: 2px; height: 15px;
+            background: rgba(255, 255, 255, 0.6);
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+
+        /* Screen Wrapper */
+        .screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; transition: opacity 0.8s ease; z-index: 5;
+        }
+
+        /* First Screen Styling */
+        #first-screen { z-index: 10; }
+        .bowl-img {
+            width: 85%; max-width: 300px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+            cursor: pointer; transition: transform 0.3s;
+        }
+        .bowl-img:active { transform: scale(0.9); }
+
+        /* Glass UI Button & Box */
+        .glass-box {
+            background: var(--glass);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px; padding: 20px;
+            margin-top: 20px; text-align: center; color: #fff;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 80%;
+        }
+
+        .btn-tap {
+            font-weight: 600; font-size: 1.1rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; }
+        }
+
+        /* Video Players */
+        .fullscreen-video {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; display: none; z-index: 15;
+        }
+
+        .hidden { opacity: 0; pointer-events: none; }
+
+    </style>
+</head>
+<body>
+
+    <div class="rain-container" id="rain"></div>
+
+    <div id="first-screen" class="screen">
+        <img src="first.png" class="bowl-img" onclick="startExperience()" alt="Silver Bowl">
+        <div class="glass-box btn-tap">နှိပ်ပါ</div>
+    </div>
+
+    <video id="second-video" class="fullscreen-video" playsinline>
+        <source src="second.mp4" type="video/mp4">
+    </video>
+
+    <video id="third-video" class="fullscreen-video" playsinline loop>
+        <source src="third.mp4" type="video/mp4">
+    </video>
+
+    <div id="blessing-ui" class="screen hidden" style="z-index: 20; justify-content: flex-end; padding-bottom: 50px;">
+        <div class="glass-box">
+            <h2 style="margin-bottom: 10px;">💦 မင်္ဂလာသင်္ကြန် 💦</h2>
+            <p>ဘေးဘယာဝေးကွာပြီး အေးမြပျော်ရွှင်ပါစေ။</p>
+        </div>
+    </div>
+
+    <script>
+        // Create Rain Drops
+        function createRain() {
+            const rainContainer = document.getElementById('rain');
+            for (let i = 0; i < 50; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('drop');
+                drop.style.left = Math.random() * 100 + 'vw';
+                drop.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+                drop.style.opacity = Math.random();
+                rainContainer.appendChild(drop);
+            }
+        }
+        createRain();
+
+        function startExperience() {
+            const firstScreen = document.getElementById('first-screen');
+            const secondVid = document.getElementById('second-video');
+            const thirdVid = document.getElementById('third-video');
+            const blessingUI = document.getElementById('blessing-ui');
+
+            // 1. Hide first screen
+            firstScreen.classList.add('hidden');
+
+            // 2. Play Second Video (Water Splash)
+            secondVid.style.display = 'block';
+            secondVid.play();
+
+            // 3. When Second Video ends
+            secondVid.onended = () => {
+                secondVid.style.display = 'none';
+                
+                // 4. Play Third Video (Auto)
+                thirdVid.style.display = 'block';
+                thirdVid.play();
+                
+                // 5. Show Blessing UI
+                blessingUI.classList.remove('hidden');
+            };
+        }
+    </script>
+</body>
+</html>
