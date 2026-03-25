@@ -29,13 +29,17 @@
         /* --- FIRST SCREEN (BOWL) --- */
         #first-screen { background: #d0f0f5; }
         
-        .bowl-container {
+        #first-screen .bowl-container {
             position: relative;
-            width: 75%; max-width: 300px;
+            /* ပြင်ဆင်ချက်: ပုံကို ကြီးပေးထားသည် (မူရင်း 75%, max-width 300px) */
+            width: 90%; 
+            max-width: 400px;
             cursor: pointer;
             line-height: 0;
             overflow: hidden; /* ရေစက်တွေ ဖလားပြင်ပမထွက်အောင် */
             border-radius: 50% 50% 0 0; /* ဖလားပုံစံနဲ့ ညှိတာ (လိုအပ်ရင်ပြင်ပါ) */
+            /* ပြင်ဆင်ချက်: အောက်ကို ချပေးရန် padding (သို့မဟုတ်) margin-top ကို သုံးပါ */
+            margin-bottom: 80px; /* အောက်ကို ချပေးထားသည် (မူရင်း မရှိ) */
         }
         
         .bowl-img { width: 100%; position: relative; z-index: 2; }
@@ -46,15 +50,20 @@
             z-index: 1; pointer-events: none;
         }
         .drop {
-            position: absolute; width: 2px; height: 10px;
-            background: rgba(255, 255, 255, 0.6);
+            position: absolute;
+            /* ပြင်ဆင်ချက်: မိုးရေစက်ကို ကြီးပေးထားသည် (မူရင်း 2px x 10px) */
+            width: 5px; height: 25px; 
+            background: rgba(255, 255, 255, 0.7); /* ပိုထင်ရှားအောင် opacity တိုး */
             animation: fallInside linear infinite;
         }
-        @keyframes fallInside { to { transform: translateY(300px); } } /* ဖလားအနက်အထိညှိ */
+        /* ပြင်ဆင်ချက်: ပုံကြီးလာတဲ့အတွက် အနက်ကို ညှိထားသည် (မူရင်း 300px) */
+        @keyframes fallInside { to { transform: translateY(400px); } } 
 
         .tap-text {
-            margin-top: 15px; color: #1a4d55;
+            margin-top: -65px; /* ပြင်ဆင်ချက်: ပုံအောက်ရောက်ဖို့ အပေါ်ကို ပြန်တင်ပေးထားသည် (ပုံအောက် နေရာကျဉ်းသွားလို့) */
+            color: #1a4d55;
             background: rgba(255,255,255,0.4); border-radius: 10px; padding: 5px 15px;
+            z-index: 20; /* tap text က ပုံအပေါ်ကနေ နှိပ်လို့ရအောင် */
         }
 
         /* --- iOS DESIGN MESSAGE BOX --- */
@@ -118,7 +127,7 @@
             width: 100%; overflow: hidden; margin-top: 15px;
             color: #1a4d55; white-space: nowrap;
         }
-        .marquee p { display: inline-block; padding-left: 100%; animation: marqueeRun 10s linear infinite; margin: 0; }
+        .marquee p { display: inline-block; padding-left: 100%; animation: marqueeRun 15s linear infinite; margin: 0; }
         @keyframes marqueeRun { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
         /* OK Button */
@@ -135,7 +144,7 @@
 
     <div id="first-screen" class="screen">
         <div class="bowl-container" onclick="showBlessing()">
-            <img src="first.png" class="bowl-img" alt="Silver Bowl">
+            <img src="first.png" class="bowl-img" alt="Silver Bowl with Flower">
             <div class="bowl-rain" id="rain"></div>
         </div>
         <div class="tap-text">နှိပ်ပါ 💦</div>
@@ -164,7 +173,7 @@
                 </video>
             </div>
             <div class="marquee">
-                <p>ဆုမွန်းကောင်းတောင်းပေးတဲ့စာ ဆုမွန်းကောင်းတောင်းပေးတဲ့စာ ဆုမွန်းကောင်းတောင်းပေးတဲ့စာ</p>
+                <p>ဟောင်းနွမ်းတဲ့ နှစ်ဟောင်းက အညစ်အကြေးတွေကို သင်္ကြန်ရေစင်နဲ့ ဆေးကြောပြီး၊ နှစ်သစ်မှာ ကောင်းကျိုးအဖြာဖြာ ပြည့်စုံစေဖို့ ကျွန်တော်တို့မှ ဆုမွန်ကောင်း တောင်းပေးလိုက်ပါတယ်။ ပျော်ရွှင်စရာ သင်္ကြန်ပွဲတော်ကြီး ဖြစ်ပါစေ။</p>
             </div>
         </div>
         <div class="ok-btn" onclick="sayThankYou()">OK</div>
@@ -184,7 +193,8 @@
         // 1. Create Rain Inside Bowl
         function makeRainInside() {
             const container = document.getElementById('rain');
-            for (let i = 0; i < 30; i++) {
+            // ပြင်ဆင်ချက်: မိုးရေစက် ပိုများစေရန် (မူရင်း 30)
+            for (let i = 0; i < 50; i++) {
                 const drop = document.createElement('div');
                 drop.classList.add('drop');
                 drop.style.left = Math.random() * 95 + '%'; // ဖလားအတွင်းဘက်
