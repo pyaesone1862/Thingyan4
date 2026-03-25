@@ -9,7 +9,7 @@
             --glass: rgba(255, 255, 255, 0.2);
             --border: rgba(255, 255, 255, 0.4);
             --blur: blur(15px);
-            --primary: #007aff; /* iOS Blue */
+            --primary: #007aff; 
         }
 
         body, html {
@@ -22,121 +22,112 @@
         /* Screens */
         .screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center;
+            display: flex; flex-direction: column; justify-content: flex-end; /* ပုံကို အောက်ကပ်ရန် */
             align-items: center; z-index: 10;
+            padding-bottom: 5vh; /* အောက်ခြေကနေ နည်းနည်းပဲ ခွာထားသည် */
         }
 
         /* --- FIRST SCREEN (BOWL) --- */
         #first-screen { background: #d0f0f5; }
         
-        #first-screen .bowl-container {
+        .bowl-container {
             position: relative;
-            /* ပြင်ဆင်ချက်: ပုံကို ကြီးပေးထားသည် (မူရင်း 75%, max-width 300px) */
-            width: 90%; 
-            max-width: 400px;
+            width: 120%; /* ပုံကို Screen ထက်ကျော်အောင် ကြီးပေးထားသည် */
+            max-width: 700px;
             cursor: pointer;
             line-height: 0;
-            overflow: hidden; /* ရေစက်တွေ ဖလားပြင်ပမထွက်အောင် */
-            border-radius: 50% 50% 0 0; /* ဖလားပုံစံနဲ့ ညှိတာ (လိုအပ်ရင်ပြင်ပါ) */
-            /* ပြင်ဆင်ချက်: အောက်ကို ချပေးရန် padding (သို့မဟုတ်) margin-top ကို သုံးပါ */
-            margin-bottom: 80px; /* အောက်ကို ချပေးထားသည် (မူရင်း မရှိ) */
+            margin-bottom: 10px;
         }
         
-        .bowl-img { width: 100%; position: relative; z-index: 2; }
+        .bowl-img { 
+            width: 100%; 
+            height: auto; 
+            position: relative; 
+            z-index: 2; 
+        }
 
-        /* Rain inside bowl */
+        /* Water Drop Rain */
         .bowl-rain {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; pointer-events: none;
+            position: absolute; top: -200px; left: 0; width: 100%; height: 100%;
+            z-index: 5; pointer-events: none;
         }
         .drop {
             position: absolute;
-            /* ပြင်ဆင်ချက်: မိုးရေစက်ကို ကြီးပေးထားသည် (မူရင်း 2px x 10px) */
-            width: 5px; height: 25px; 
-            background: rgba(255, 255, 255, 0.7); /* ပိုထင်ရှားအောင် opacity တိုး */
-            animation: fallInside linear infinite;
+            font-size: 30px; /* ရေစက် 💧 ကို ကြီးပေးထားသည် */
+            user-select: none;
+            animation: fall linear infinite;
         }
-        /* ပြင်ဆင်ချက်: ပုံကြီးလာတဲ့အတွက် အနက်ကို ညှိထားသည် (မူရင်း 300px) */
-        @keyframes fallInside { to { transform: translateY(400px); } } 
+        @keyframes fall {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(800px) scale(1.2); opacity: 0; }
+        }
 
         .tap-text {
-            margin-top: -65px; /* ပြင်ဆင်ချက်: ပုံအောက်ရောက်ဖို့ အပေါ်ကို ပြန်တင်ပေးထားသည် (ပုံအောက် နေရာကျဉ်းသွားလို့) */
+            margin-bottom: 30px; /* ခလုတ်ကို ပုံအောက်မှာ ထားသည် */
             color: #1a4d55;
-            background: rgba(255,255,255,0.4); border-radius: 10px; padding: 5px 15px;
-            z-index: 20; /* tap text က ပုံအပေါ်ကနေ နှိပ်လို့ရအောင် */
+            background: white; border-radius: 20px; padding: 10px 25px;
+            font-weight: bold; font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 10;
         }
 
         /* --- iOS DESIGN MESSAGE BOX --- */
         .ios-alert-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4); z-index: 50;
+            background: rgba(0,0,0,0.4); z-index: 100;
             display: none; justify-content: center; align-items: center;
             backdrop-filter: blur(5px);
         }
 
         .ios-alert {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            width: 270px; border-radius: 14px;
+            width: 280px; border-radius: 14px;
             text-align: center;
-            animation: alertShow 0.3s ease-in-out;
-            cursor: pointer;
+            animation: alertShow 0.3s ease-out;
         }
-        @keyframes alertShow { from { opacity: 0; transform: scale(1.1); } to { opacity: 1; transform: scale(1); } }
+        @keyframes alertShow { from { opacity: 0; transform: scale(1.2); } to { opacity: 1; transform: scale(1); } }
 
-        .ios-alert-body { padding: 20px; color: #000; font-size: 14px; line-height: 1.6; }
-        .ios-alert-body b { font-size: 17px; display: block; margin-bottom: 5px; }
+        .ios-alert-body { padding: 20px; color: #000; font-size: 15px; line-height: 1.5; }
+        .ios-alert-body b { font-size: 18px; display: block; margin-bottom: 8px; }
         .ios-alert-btn {
-            border-top: 1px solid rgba(0,0,0,0.15);
+            border-top: 1px solid rgba(0,0,0,0.1);
             padding: 12px; color: var(--primary); font-size: 17px; font-weight: 600;
+            cursor: pointer;
         }
 
         /* --- VIDEOS --- */
         .fs-video {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: fill; display: none; z-index: 30; background: #000;
+            object-fit: cover; display: none; z-index: 50; background: #000;
         }
 
-        /* Third Video Card */
-        #final-screen { background: rgba(208, 240, 245, 0.6); }
-
+        /* Final Card */
+        #final-screen { background: #d0f0f5; justify-content: center; padding-bottom: 0; }
         #final-card {
             display: none; flex-direction: column; align-items: center;
-            z-index: 40; width: 92%; max-width: 450px;
-            background: var(--glass);
-            backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
-            border-radius: 20px; border: 1px solid var(--border);
-            padding: 10px;
+            z-index: 60; width: 90%; max-width: 400px;
+            background: var(--glass); backdrop-filter: var(--blur);
+            border-radius: 20px; border: 1px solid var(--border); padding: 15px;
         }
 
-        /* Blinking Text */
-        .blink-text {
-            margin-bottom: 10px; color: #1a4d55; font-weight: 600;
-            animation: blinker 1.5s linear infinite;
-        }
-        @keyframes blinker { 50% { opacity: 0; } }
+        .video-box { width: 100%; border-radius: 12px; overflow: hidden; line-height: 0; }
+        #vid-music { width: 100%; }
 
-        .video-box {
-            width: 100%; border-radius: 15px; overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.2); line-height: 0;
-        }
-        #vid-music { width: 100%; object-fit: contain; }
-
-        /* Running Text (Marquee) */
         .marquee {
-            width: 100%; overflow: hidden; margin-top: 15px;
-            color: #1a4d55; white-space: nowrap;
+            width: 100%; overflow: hidden; margin: 15px 0;
+            color: #1a4d55; white-space: nowrap; font-size: 1rem;
         }
-        .marquee p { display: inline-block; padding-left: 100%; animation: marqueeRun 15s linear infinite; margin: 0; }
-        @keyframes marqueeRun { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+        .marquee p { display: inline-block; padding-left: 100%; animation: marqueeRun 15s linear infinite; }
+        @keyframes marqueeRun { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        /* OK Button */
         .ok-btn {
-            margin-top: 15px; background: rgba(0,0,0,0.1); border-radius: 8px;
-            padding: 8px 25px; cursor: pointer; color: #1a4d55; font-size: 0.9rem;
+            background: #1a4d55; color: white; border-radius: 10px;
+            padding: 10px 30px; cursor: pointer; font-weight: bold;
         }
 
-        /* Utility */
         .hidden { display: none !important; }
     </style>
 </head>
@@ -144,19 +135,19 @@
 
     <div id="first-screen" class="screen">
         <div class="bowl-container" onclick="showBlessing()">
-            <img src="first.png" class="bowl-img" alt="Silver Bowl with Flower">
-            <div class="bowl-rain" id="rain"></div>
+            <img src="first.png" class="bowl-img">
+            <div class="bowl-rain" id="rain-layer"></div>
         </div>
-        <div class="tap-text">နှိပ်ပါ 💦</div>
+        <div class="tap-text" onclick="showBlessing()">နှိပ်ပါ 💦</div>
     </div>
 
-    <div class="ios-alert-bg" id="blessing-alert" onclick="startSplash()">
+    <div class="ios-alert-bg" id="blessing-alert">
         <div class="ios-alert">
             <div class="ios-alert-body">
                 <b>💦 ဆုမွန်ကောင်း 💦</b>
-                အေးမြတဲ့ သင်္ကြန်ရေနဲ့အတူ စိတ်၏ချမ်းသာခြင်း၊ ကိုယ်၏ကျန်းမာခြင်းနဲ့ ပြည့်စုံပါစေကြောင်း ဆုမွန်ကောင်းတောင်းအပ်ပါတယ်။
+                အေးမြတဲ့ သင်္ကြန်ရေနဲ့အတူ နှစ်သစ်မှာ စိတ်၏ချမ်းသာခြင်း၊ ကိုယ်၏ကျန်းမာခြင်းနဲ့ ပြည့်စုံပါစေကြောင်း ဆုမွန်ကောင်းတောင်းအပ်ပါတယ်။
             </div>
-            <div class="ios-alert-btn">နှိပ်ပါ</div>
+            <div class="ios-alert-btn" onclick="startSplash()">ဆက်လက်ကြည့်ရှုမည်</div>
         </div>
     </div>
 
@@ -166,7 +157,7 @@
 
     <div id="final-screen" class="screen hidden">
         <div id="final-card">
-            <div class="blink-text">မင်္ဂလာအခါသမယပါ</div>
+            <div style="color:#1a4d55; font-weight:bold; margin-bottom:10px;">မင်္ဂလာနှစ်သစ်ပါ</div>
             <div class="video-box">
                 <video id="vid-music" playsinline loop>
                     <source src="third.mp4" type="video/mp4">
@@ -175,78 +166,61 @@
             <div class="marquee">
                 <p>ဟောင်းနွမ်းတဲ့ နှစ်ဟောင်းက အညစ်အကြေးတွေကို သင်္ကြန်ရေစင်နဲ့ ဆေးကြောပြီး၊ နှစ်သစ်မှာ ကောင်းကျိုးအဖြာဖြာ ပြည့်စုံစေဖို့ ကျွန်တော်တို့မှ ဆုမွန်ကောင်း တောင်းပေးလိုက်ပါတယ်။ ပျော်ရွှင်စရာ သင်္ကြန်ပွဲတော်ကြီး ဖြစ်ပါစေ။</p>
             </div>
+            <div class="ok-btn" onclick="sayThankYou()">အိုကေ</div>
         </div>
-        <div class="ok-btn" onclick="sayThankYou()">OK</div>
     </div>
 
-    <div class="ios-alert-bg" id="thankyou-alert" onclick="closeApp()">
+    <div class="ios-alert-bg" id="thankyou-alert">
         <div class="ios-alert">
             <div class="ios-alert-body">
-                <b>Thank You!</b>
-                Website ကို အသုံးပြုပေးလို့ ကျေးဇူးတင်ပါတယ်။ <br> <small>(ကျေးဇူးပြု၍ Browser Tab ကို ပိတ်ပေးပါ)</small>
+                <b>ကျေးဇူးတင်ပါတယ်</b>
+                Website ကို အသုံးပြုပေးလို့ ကျေးဇူးတင်ပါတယ်။ <br> <small>(Browser Tab ကို ပိတ်နိုင်ပါပြီ)</small>
             </div>
-            <div class="ios-alert-btn">ပိတ်ရန်</div>
+            <div class="ios-alert-btn" onclick="location.reload()">ပြန်စမည်</div>
         </div>
     </div>
 
     <script>
-        // 1. Create Rain Inside Bowl
-        function makeRainInside() {
-            const container = document.getElementById('rain');
-            // ပြင်ဆင်ချက်: မိုးရေစက် ပိုများစေရန် (မူရင်း 30)
-            for (let i = 0; i < 50; i++) {
+        // Create 💧 Rain
+        function createRain() {
+            const container = document.getElementById('rain-layer');
+            for (let i = 0; i < 40; i++) {
                 const drop = document.createElement('div');
-                drop.classList.add('drop');
-                drop.style.left = Math.random() * 95 + '%'; // ဖလားအတွင်းဘက်
-                drop.style.animationDuration = (Math.random() * 0.8 + 0.5) + 's';
-                drop.style.animationDelay = Math.random() + 's';
+                drop.className = 'drop';
+                drop.innerHTML = '💧';
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+                drop.style.animationDelay = Math.random() * 3 + 's';
                 container.appendChild(drop);
             }
         }
-        makeRainInside();
+        createRain();
 
-        // 2. Show iOS Blessing Alert
         function showBlessing() {
             document.getElementById('blessing-alert').style.display = 'flex';
         }
 
-        // 3. Start Splash Video (Second.mp4)
         function startSplash() {
             document.getElementById('blessing-alert').style.display = 'none';
             document.getElementById('first-screen').classList.add('hidden');
-            
             const splash = document.getElementById('vid-splash');
             splash.style.display = 'block';
-            splash.muted = false;
             splash.play();
-
             splash.onended = () => {
                 splash.style.display = 'none';
-                startMusic();
+                showFinal();
             };
         }
 
-        // 4. Start Music Video Card (Third.mp4)
-        function startMusic() {
+        function showFinal() {
             document.getElementById('final-screen').classList.remove('hidden');
             document.getElementById('final-card').style.display = 'flex';
-            
-            const music = document.getElementById('vid-music');
-            music.muted = false;
-            music.play();
+            document.getElementById('vid-music').play();
         }
 
-        // 5. Show Thank You Alert
         function sayThankYou() {
             document.getElementById('vid-music').pause();
             document.getElementById('thankyou-alert').style.display = 'flex';
-        }
-
-        // 6. Final Close Action
-        function closeApp() {
-            document.getElementById('thankyou-alert').style.display = 'none';
-            // Website ကိုပိတ်ဖို့ User ကို Tab ပိတ်ခိုင်းတာကလွဲလို့ Code နဲ့လုပ်မရပါဘူး
-            alert("Website ကို အသုံးပြုပေးလို့ ကျေးဇူးတင်ပါတယ်။ (ကျေးဇူးပြု၍ Tab ကို ပိတ်ပေးပါ)");
         }
     </script>
 </body>
