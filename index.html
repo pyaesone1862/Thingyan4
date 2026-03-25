@@ -5,82 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Songkran Blessing 2026</title>
     <style>
-        :root {
-            --glass: rgba(255, 255, 255, 0.2);
-            --blur: blur(15px);
-        }
-
         body, html {
-            margin: 0; padding: 0; height: 100%;
-            width: 100%; overflow: hidden;
-            background: #e0f7fa; /* ရေအရောင်ဖျော့ဖျော့ */
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Pyidaungsu", sans-serif;
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            overflow: hidden; background: #d0f0f5; 
+            font-family: sans-serif;
         }
 
-        /* Rain Drops Animation */
+        /* ရေစက်ကျတဲ့ Animation */
         .rain-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1; pointer-events: none;
         }
-
         .drop {
-            position: absolute; width: 2px; height: 15px;
-            background: rgba(255, 255, 255, 0.6);
+            position: absolute; width: 3px; height: 18px;
+            background: rgba(255, 255, 255, 0.8);
             animation: fall linear infinite;
         }
-
         @keyframes fall {
-            to { transform: translateY(100vh); }
+            to { transform: translateY(110vh); }
         }
 
         /* Screen Wrapper */
         .screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center;
-            align-items: center; transition: opacity 0.8s ease; z-index: 5;
+            align-items: center; z-index: 10;
         }
 
-        /* First Screen Styling */
-        #first-screen { z-index: 10; opacity: 1; pointer-events: auto; }
+        /* Silver Bowl Styling */
         .bowl-img {
-            width: 85%; max-width: 300px;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
-            cursor: pointer; transition: transform 0.3s;
-            z-index: 11; /* ရေစက်တွေရဲ့အပေါ်မှာရှိဖို့ */
+            width: 80%; max-width: 300px;
+            cursor: pointer; z-index: 20;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+            transition: transform 0.2s;
         }
         .bowl-img:active { transform: scale(0.9); }
 
-        /* Glass UI Button & Box */
-        .glass-box {
-            background: var(--glass);
-            backdrop-filter: var(--blur);
-            -webkit-backdrop-filter: var(--blur);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px; padding: 20px;
-            margin-top: 20px; text-align: center; color: #fff;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            width: 80%; max-width: 400px;
-            pointer-events: none; /* စာကိုနှိပ်ရင်မရအောင်၊ ပုံကိုပဲနှိပ်အောင် */
-        }
-
-        .btn-tap {
-            font-weight: 600; font-size: 1.1rem;
+        /* Glass UI Button */
+        .glass-btn {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 15px 40px;
+            color: #444; font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            pointer-events: none; /* ပုံကိုပဲ နှိပ်စေချင်လို့ */
             animation: pulse 1.5s infinite;
         }
-
         @keyframes pulse {
-            0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; }
+            0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; }
         }
 
-        /* Video Players */
-        .fullscreen-video {
+        /* Fullscreen Video */
+        .fs-video {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; display: none; z-index: 15;
+            object-fit: cover; display: none; z-index: 30;
         }
 
-        /* Utility */
-        .hidden { opacity: 0 !important; pointer-events: none !important; display: none !important; }
-
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -88,83 +73,50 @@
     <div class="rain-container" id="rain"></div>
 
     <div id="first-screen" class="screen">
-        <img src="1000074628.png" class="bowl-img" onclick="startExperience()" alt="Silver Bowl">
-        <div class="glass-box btn-tap">ငွေဖလားကို နှိပ်ပါ 💦</div>
+        <img src="first.png" class="bowl-img" onclick="startApp()" alt="Bowl">
+        <div class="glass-btn">ရေလောင်းရန် ငွေဖလားကို နှိပ်ပါ</div>
     </div>
 
-    <video id="second-video" class="fullscreen-video" playsinline muted>
-        <source src="1000074625.mp4" type="video/mp4">
+    <video id="vid-splash" class="fs-video" playsinline muted>
+        <source src="second.mp4" type="video/mp4">
     </video>
 
-    <video id="third-video" class="fullscreen-video" playsinline muted loop>
-        <source src="1000074626.mp4" type="video/mp4">
+    <video id="vid-music" class="fs-video" playsinline muted loop>
+        <source src="third.mp4" type="video/mp4">
     </video>
-
-    <div id="blessing-ui" class="screen hidden" style="z-index: 20; justify-content: flex-end; padding-bottom: 50px;">
-        <div class="glass-box">
-            <h2 style="margin-bottom: 10px;">💦 မင်္ဂလာသင်္ကြန် 💦</h2>
-            <p>ဘေးဘယာဝေးကွာပြီး အေးမြပျော်ရွှင်ပါစေ။</p>
-        </div>
-    </div>
 
     <script>
-        // 1. Create Rain Drops (ရေစက်ကျအောင်လုပ်တာ)
-        function createRain() {
-            const rainContainer = document.getElementById('rain');
-            // ရေစက်အရေအတွက် ၁၀၀ အထိ တိုးလိုက်ပါတယ်
-            for (let i = 0; i < 100; i++) {
+        // ရေစက်ကျအောင်လုပ်မယ်
+        function makeRain() {
+            const container = document.getElementById('rain');
+            for (let i = 0; i < 60; i++) {
                 const drop = document.createElement('div');
                 drop.classList.add('drop');
                 drop.style.left = Math.random() * 100 + 'vw';
-                // ပြုတ်ကျတဲ့ အရှိန်ကို အမျိုးမျိုးဖြစ်အောင်လုပ်တာ
-                drop.style.animationDuration = (Math.random() * 0.7 + 0.3) + 's';
-                drop.style.opacity = Math.random() * 0.5;
-                rainContainer.appendChild(drop);
+                drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+                drop.style.opacity = Math.random();
+                container.appendChild(drop);
             }
         }
-        
-        // Page Loading ပြီးတာနဲ့ ရေစက်ချမယ်
-        window.onload = createRain;
+        makeRain();
 
-        // 2. Click Logic (ပုံကိုနှိပ်ရင် လုပ်မယ့်အလုပ်)
-        function startExperience() {
-            console.log("Start button clicked"); // စမ်းသပ်ဖို့ Log ထုတ်တာ
+        function startApp() {
+            const screen1 = document.getElementById('first-screen');
+            const splash = document.getElementById('vid-splash');
+            const music = document.getElementById('vid-music');
+
+            screen1.classList.add('hidden');
+            splash.style.display = 'block';
             
-            const firstScreen = document.getElementById('first-screen');
-            const secondVid = document.getElementById('second-video');
-            const thirdVid = document.getElementById('third-video');
-            const blessingUI = document.getElementById('blessing-ui');
+            // Splash video ကို play မယ်
+            splash.play().catch(e => console.log("Play error", e));
 
-            // နှိပ်လိုက်ရင် ပထမမျက်နှာကို ဖျောက်လိုက်မယ်
-            firstScreen.classList.add('hidden');
-
-            // ဒုတိယ ဗီဒီယို (ရေပက်တာ) ကို ပြပြီး Play မယ်
-            secondVid.style.display = 'block';
-            
-            // ဖုန်းအများစုမှာ muted မပါရင် autoplay မရလို့ muted ထည့်ထားပါတယ်
-            secondVid.play().then(() => {
-                console.log("Second video playing");
-            }).catch(error => {
-                console.error("Video play failed:", error);
-                // Video play မရရင် တန်းပြီး Third video ကို သွားအောင်လုပ်လို့ရပါတယ်
-                playThirdVideo();
-            });
-
-            // ဒုတိယဗီဒီယို ပြီးသွားရင် လုပ်မယ့်အလုပ်
-            secondVid.onended = () => {
-                playThirdVideo();
+            // Splash video ပြီးရင် music video ကိုပြမယ်
+            splash.onended = function() {
+                splash.style.display = 'none';
+                music.style.display = 'block';
+                music.play().catch(e => console.log("Music play error", e));
             };
-
-            function playThirdVideo() {
-                secondVid.style.display = 'none';
-                
-                // တတိယဗီဒီယို (သီချင်း) ကို ပြပြီး Play မယ်
-                thirdVid.style.display = 'block';
-                thirdVid.play();
-                
-                // ဆုတောင်းစာ UI ကို ပြမယ်
-                blessingUI.classList.remove('hidden');
-            }
         }
     </script>
 </body>
