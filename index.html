@@ -2,16 +2,23 @@
 <html lang="my">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Songkran 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Songkran Blessing 2026</title>
     <style>
-        body, html {
-            margin: 0; padding: 0; height: 100%; width: 100%;
-            overflow: hidden; background: #000; /* Video ကြည့်ရတာ လှအောင် အမည်းရောင်ထားတာ */
-            font-family: sans-serif;
+        :root {
+            --glass: rgba(255, 255, 255, 0.25);
+            --blur: blur(15px);
+            --text-color: #2c3e50;
         }
 
-        /* ရေစက်ကျတဲ့ Animation */
+        body, html {
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            overflow: hidden; background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 💦 ရေစက်ကျတဲ့ Animation (ပြန်ထည့်ထားတာ) */
         .rain-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1; pointer-events: none;
@@ -23,34 +30,79 @@
         }
         @keyframes fall { to { transform: translateY(110vh); } }
 
+        /* ပထမမျက်နှာပြင် */
         .screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center;
             align-items: center; z-index: 10;
-            background: #d0f0f5;
+            background: #d0f0f5; /* ရေပြာရောင်ဖျော့ */
         }
 
         .bowl-img {
-            width: 70%; max-width: 250px;
+            width: 75%; max-width: 280px;
             cursor: pointer; z-index: 20;
-            transition: transform 0.2s;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15));
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .bowl-img:active { transform: scale(0.9) rotate(-3deg); }
 
+        /* နှိပ်ရန်စာသား (Glass Style) */
         .glass-btn {
-            margin-top: 20px; background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(10px); border-radius: 10px;
-            padding: 10px 20px; font-weight: bold; color: #333;
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 15px 35px;
+            color: #444; font-weight: 600; font-size: 1.1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: pulse 1.8s infinite;
         }
+        @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
 
-        /* Fullscreen Video - Size ပြင်ထားပါတယ် */
+        /* Fullscreen Video */
         .fs-video {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: contain; /* Video တစ်ခုလုံးကို screen ထဲဝင်အောင် အချိုးကျ ပြင်တာ */
+            object-fit: contain; /* Video အချိုးအစားမှန်အောင်ပြတာ */
             display: none; z-index: 30;
             background: #000;
         }
 
+        /* ✨ ဆုတောင်းစာ Overlay (iOS Glass Style) */
+        #blessing-overlay {
+            position: fixed; bottom: 40px; left: 50%;
+            transform: translateX(-50%);
+            width: 85%; max-width: 400px;
+            z-index: 40; /* Video ရဲ့အပေါ်မှာပြဖို့ */
+            display: none; opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .blessing-card {
+            background: var(--glass);
+            backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            color: white;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .blessing-card h1 {
+            font-size: 1.8rem; margin: 0 0 10px 0;
+            color: #fff;
+        }
+
+        .blessing-card p {
+            font-size: 1.1rem; line-height: 1.6; margin: 0;
+            font-weight: 400;
+        }
+
         .hidden { display: none !important; }
+        .show { opacity: 1 !important; }
+
     </style>
 </head>
 <body>
@@ -58,7 +110,7 @@
     <div class="rain-container" id="rain"></div>
 
     <div id="first-screen" class="screen">
-        <img src="first.png" class="bowl-img" onclick="startApp()">
+        <img src="first.png" class="bowl-img" onclick="startExperience()" alt="Songkran Bowl">
         <div class="glass-btn">ရေလောင်းရန် နှိပ်ပါ 💦</div>
     </div>
 
@@ -70,36 +122,65 @@
         <source src="third.mp4" type="video/mp4">
     </video>
 
+    <div id="blessing-overlay">
+        <div class="blessing-card">
+            <h1>💦 ပျော်ရွှင်ဖွယ်သင်္ကြန် 💦</h1>
+            <p>
+                ဘေးဘယာဝေးကွာပြီး အေးမြပျော်ရွှင်ပါစေ။<br>
+                စိတ်၏ချမ်းသာခြင်း၊ ကိုယ်၏ကျန်းမာခြင်းနဲ့ ပြည့်စုံပါစေကြောင်း
+                ဆုမွန်ကောင်းတောင်းအပ်ပါတယ်။
+            </p>
+        </div>
+    </div>
+
     <script>
+        // 1. ရေစက်ကျအောင်လုပ်တာ
         function makeRain() {
             const container = document.getElementById('rain');
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 60; i++) {
                 const drop = document.createElement('div');
                 drop.classList.add('drop');
                 drop.style.left = Math.random() * 100 + 'vw';
-                drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+                drop.style.animationDuration = (Math.random() * 0.7 + 0.5) + 's';
+                drop.style.opacity = Math.random() * 0.5; // ရေစက်လေးတွေ ပါးပါးလေးပဲ
                 container.appendChild(drop);
             }
         }
-        makeRain();
+        
+        // Page loading ပြီးတာနဲ့ ရေစက်ချမယ်
+        window.onload = makeRain;
 
-        function startApp() {
+        // 2. Experience စတင်တာ
+        function startExperience() {
+            console.log("Experience started");
+
             const screen1 = document.getElementById('first-screen');
             const splash = document.getElementById('vid-splash');
             const music = document.getElementById('vid-music');
+            const blessing = document.getElementById('blessing-overlay');
 
+            // ပထမမျက်နှာကို ဖျောက်၊ ဒုတိယဗီဒီယိုကိုပြ
             screen1.classList.add('hidden');
             splash.style.display = 'block';
             
-            // User က နှိပ်လိုက်ပြီဖြစ်လို့ အသံကို ဖွင့်လို့ရသွားပါပြီ (Unmute)
+            // အသံဖွင့်ပြီး play မယ်
             splash.muted = false; 
-            splash.play();
+            splash.play().catch(e => console.log("Splash play failed", e));
 
+            // ဒုတိယဗီဒီယို (ရေပက်တာ) ပြီးသွားတဲ့အခါ
             splash.onended = function() {
                 splash.style.display = 'none';
+                
+                // တတိယဗီဒီယို (သီချင်း) ကိုပြပြီး play မယ်
                 music.style.display = 'block';
                 music.muted = false;
-                music.play();
+                music.play().catch(e => console.log("Music play failed", e));
+                
+                // ✨ ဆုတောင်းစာ Card ကို ပေါ်လာအောင်လုပ်မယ်
+                blessing.style.display = 'block';
+                setTimeout(() => {
+                    blessing.classList.add('show'); // Smooth transition လေးနဲ့ပေါ်လာဖို့
+                }, 100);
             };
         }
     </script>
